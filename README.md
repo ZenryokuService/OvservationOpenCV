@@ -1,0 +1,2 @@
+# OvservationOpenCV
+ラズパイでOpenCVを使用して、動画撮影を行うJavaFXで画面を作成して実行定点観測(fixed point Observation)を行う
