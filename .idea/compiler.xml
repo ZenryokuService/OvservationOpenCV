@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="OvservationOpenCV" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="OvservationOpenCV" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="OvservationOpenCV" options="-cp C:\OpenCV\opencv\build\java\opencv-480.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.fxml.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.swing.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.base.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.swing.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.controls.jar;C:\JavaFX\javafx-sdk-20.0.1\lib\javafx.graphics.jar;C:\OpenCV\opencv\build\java\x86" />
+    </option>
+  </component>
+</project>
