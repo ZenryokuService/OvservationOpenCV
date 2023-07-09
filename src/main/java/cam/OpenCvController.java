@@ -13,11 +13,18 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javafx.embed.swing.SwingFXUtils;
+import javax.imageio.ImageIO;
 
 /**
  * FXMLで定義したコントローラクラス。
@@ -29,6 +36,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class OpenCvController {
     private final int FOURCC_MP4S = VideoWriter.fourcc('M', 'P', '4', 'S');
+    /** カメラ番号 */
+    private final int CAM_NO = 1;
+    /** カウンター */
+    private long imgCount = 0;
     /** FXML カメラ開始ボタン -> fx:id="button" */
     @FXML
     private Button button;
@@ -50,6 +61,8 @@ public class OpenCvController {
 
     /** タイマー */
     private ScheduledExecutorService timer;
+    /** カメラのタイマー */
+    private ScheduledExecutorService camTimer;
     /** OpenCVの部品 */
     private VideoCapture capture;
     /** OpenCVの部品 */
@@ -113,7 +126,7 @@ public class OpenCvController {
         if (!this.cameraActive)
         {
             // キャプチャ開始
-            this.capture.open(0);
+            this.capture.open(CAM_NO);
 
             // ビデオが起動しているか否か
             if (this.capture.isOpened())
@@ -132,8 +145,31 @@ public class OpenCvController {
                     }
                 };
 
+				// カメラのタイマー処理
+				Runnable shot = new Runnable() {
+					@Override
+					public void run() {
+                        String root = Paths.get(".").toString();
+						System.out.println("*** Testing ***");
+						System.out.println(root);
+                        Mat frame = grabFrame();
+                        Image imageToShow = Utils.mat2Image(frame);
+                        File outputFile = new File("./img/" + imgCount + ".png");
+                        BufferedImage bImage = SwingFXUtils.fromFXImage(imageToShow, null);
+						try {
+						  ImageIO.write(bImage, "png", outputFile);
+						} catch (IOException e) {
+						  throw new RuntimeException(e);
+						}
+						imgCount++;
+					}
+				};
                 this.timer = Executors.newSingleThreadScheduledExecutor();
-                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+                this.timer.scheduleAtFixedRate(shot, 10 * 1000, 60 * 1000, TimeUnit.MILLISECONDS);
+                
+                // カメラのタイマー
+                this.camTimer = Executors.newSingleThreadScheduledExecutor();
+                this.camTimer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
 
                 // update the button content
                 this.button.setText("Stop Camera");
